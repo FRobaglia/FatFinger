@@ -4,15 +4,15 @@ let span = document.querySelector(".current-word");
 let scorebox = document.querySelector(".score");
 let score = 0;
 let names = [
-  "haris",
-  "suce",
-  "bite",
-  "couillasse",
-  "trouduc",
-  "julian",
-  "felix",
-  "pute",
-  "salope"
+  "hetic",
+  "brontis",
+  "javascript",
+  "bcalou",
+  "yves",
+  "jsPUR",
+  "canvas",
+  "html",
+  "css"
 ];
 
 function init() {
