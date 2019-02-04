@@ -1,9 +1,10 @@
 let input = document.querySelector(".game");
 let currentWord;
-let span = document.querySelector(".current-word");
+let currentBox = document.querySelector(".current-word");
+let nextWord;
+let nextBox = document.querySelector(".next-word");
 let scoreBox = document.querySelector(".score");
 let timeBox = document.querySelector(".time");
-let lastScoreBox = document.querySelector(".last-score");
 let bestScoreBox = document.querySelector(".best-score");
 let lastScore = 0;
 let bestScore = 0;
@@ -11,9 +12,9 @@ let score;
 let time;
 let names = [
   "hetic",
-  "brontis",
+  "chrome",
   "javascript",
-  "bcalou",
+  "frontend",
   "framework",
   "canvas",
   "html",
@@ -21,30 +22,41 @@ let names = [
   "library",
   "terminal",
   "bash",
-  "vscode",
   "figma",
   "sketch",
-  "CMDER",
   "npm",
   "sass",
-  "web"
+  "internet",
+  "class",
+  "semantic",
+  "fullstack",
+  "UX",
+  "UI",
+  "design",
+  "firefox",
+  "ASCII",
+  "cookie",
+  "header",
+  "php",
+  "sql",
+  "backend",
+  "indent",
+  "codepen",
+  "database"
 ];
 
 function init() {
-  lastScoreBox.innerHTML = lastScore;
-  bestScoreBox.innerHTML = bestScore;
-  time = 60;
+  time = 30;
   score = 0;
   timeBox.innerHTML = time;
-  newWord();
-  updateScore();
   updateTime();
+  newWord();
 }
 
 function updateTime() {
   timeBox.innerHTML = time;
   time--;
-  if (time > 0) {
+  if (time > -1) {
     setTimeout(updateTime, 1000);
   } else {
     lastScore = score;
@@ -55,33 +67,33 @@ function updateTime() {
   }
 }
 
-function updateScore() {
-  scoreBox.innerHTML = score;
-}
-
 function newWord() {
-  input.style.border = "3px solid black";
-  currentWord = names[Math.floor(Math.random() * names.length)];
-  span.innerHTML = currentWord;
+  input.style.border = "3px solid #2c3e50";
+  if (!nextWord) {
+    currentWord = names[Math.floor(Math.random() * names.length)];
+    nextWord = names[Math.floor(Math.random() * names.length)];
+  } else {
+    currentWord = nextWord;
+    nextWord = names[Math.floor(Math.random() * names.length)];
+  }
+  currentBox.innerHTML = currentWord;
+  nextBox.innerHTML = nextWord;
 }
 
 input.addEventListener("keyup", function() {
   if (input.value === "") {
-    input.style.border = "3px solid black";
+    input.style.border = "3px solid #2c3e50";
   } else if (input.value === currentWord) {
-    input.style.border = "3px solid green";
-  } else if (input.value === currentWord + " ") {
     score++;
     input.value = null;
     newWord();
-    updateScore();
   } else {
     for (let i = 0; i < input.value.length; i++) {
       const letter = input.value[i];
-      if (letter != currentWord[i]) {
-        input.style.border = "3px solid red";
+      if (letter == currentWord[i]) {
+        input.style.border = "3px solid #2ecc71";
       } else {
-        input.style.border = "3px solid green";
+        input.style.border = "3px solid #e74c3c";
       }
     }
   }
