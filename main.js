@@ -127,9 +127,12 @@ input.addEventListener("keyup", function(event) {
   }
   if (input.value === "") {
     setNormalBorder();
-  } else if (input.value === currentWord + " ") {
+  } else if (
+    input.value === currentWord + " " ||
+    (input.value === currentWord && event.keyCode === 13)
+  ) {
     goodAnswer();
-  } else if (event.keyCode === 32) {
+  } else if (event.keyCode === 32 || event.keyCode === 13) {
     badAnswer();
   }
 });
