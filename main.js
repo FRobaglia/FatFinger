@@ -1,15 +1,18 @@
 let input = document.querySelector(".game");
-let currentWord;
-let currentBox = document.querySelector(".current-word");
-let nextWord;
-let nextBox = document.querySelector(".next-word");
-let scoreBox = document.querySelector(".score");
+let nextWordBox = document.querySelector(".next-word");
 let timeBox = document.querySelector(".time");
-let bestScoreBox = document.querySelector(".best-score");
+let currentWordBox = document.querySelector(".current-word");
+
+let currentWord;
+let nextWord;
+
+let timer = false;
 let lastScore = 0;
 let bestScore = 0;
+
 let score;
 let time;
+
 let names = [
   "hetic",
   "chrome",
@@ -35,7 +38,10 @@ let names = [
   "design",
   "firefox",
   "ASCII",
-  "cookie",
+  "cookies",
+  "parcel",
+  "flex",
+  "display",  
   "header",
   "php",
   "sql",
@@ -49,26 +55,31 @@ function init() {
   time = 30;
   score = 0;
   timeBox.innerHTML = time;
-  updateTime();
   newWord();
 }
 
-function updateTime() {
-  timeBox.innerHTML = time;
+function startTimer() {
+  timer = true;
   time--;
+  timeBox.innerHTML = time;
   if (time > -1) {
-    setTimeout(updateTime, 1000);
+    setTimeout(startTimer, 1000);
   } else {
-    lastScore = score;
-    if (lastScore > bestScore) {
-      bestScore = lastScore;
-    }
-    init();
+    gameOver();
   }
 }
 
+function gameOver() {
+  timer = false;
+  lastScore = score;
+  if (lastScore > bestScore) {
+    bestScore = lastScore;
+  }
+  init();
+}
+
 function newWord() {
-  input.style.border = "3px solid #2c3e50";
+  input.style.border = "3px solid #1d2935";
   if (!nextWord) {
     currentWord = names[Math.floor(Math.random() * names.length)];
     nextWord = names[Math.floor(Math.random() * names.length)];
@@ -76,13 +87,16 @@ function newWord() {
     currentWord = nextWord;
     nextWord = names[Math.floor(Math.random() * names.length)];
   }
-  currentBox.innerHTML = currentWord;
-  nextBox.innerHTML = nextWord;
+  currentWordBox.innerHTML = currentWord;
+  nextWordBox.innerHTML = nextWord;
 }
 
 input.addEventListener("keyup", function() {
+  if (!timer) {
+    startTimer();
+  }
   if (input.value === "") {
-    input.style.border = "3px solid #2c3e50";
+    input.style.border = "3px solid #1d2935";
   } else if (input.value === currentWord) {
     score++;
     input.value = null;
@@ -98,5 +112,11 @@ input.addEventListener("keyup", function() {
     }
   }
 });
+
+window.onload = function() {
+  input.onpaste = function(e) {
+    e.preventDefault();
+  }
+ }
 
 init();
