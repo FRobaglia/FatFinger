@@ -2,13 +2,37 @@
   box-sizing: border-box;
 }
 body {
+  transition: all 0.3s;
   color: #1d2935;
   background-color: whitesmoke;
   font-family: "Helvetica";
 }
+body.dark {
+  color: whitesmoke;
+  background-color: #1d2935;;
+}
 p {
   padding: 0;
   margin: 0;
+}
+*::selection {
+  background: #2ecc71;
+}
+.light-dark {
+  transition: filter 0.3s;
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: url("imgs/sun.svg");
+  background-size: cover;
+  width: 36px;
+  height: 36px;
+}
+.light-dark.dark {
+  filter: invert(100%);
 }
 
 
@@ -21,6 +45,12 @@ p {
   width: 250px;
   font-size: 30px;
   padding: 8px 12px;
+  border: 3px solid #1d2935;
+}
+.game.dark {
+  border: 3px solid whitesmoke;
+  background-color: #11181f;
+  color: whitesmoke
 }
 .game:focus {
   outline: none;

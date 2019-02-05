@@ -2,6 +2,8 @@ let input = document.querySelector(".game");
 let nextWordBox = document.querySelector(".next-word");
 let timeBox = document.querySelector(".time");
 let currentWordBox = document.querySelector(".current-word");
+let darkLightButton = document.querySelector(".light-dark");
+let body = document.querySelector("body");
 
 let currentWord;
 let nextWord;
@@ -38,7 +40,7 @@ let names = [
   "cookies",
   "parcel",
   "flex",
-  "display",  
+  "display",
   "header",
   "php",
   "sql",
@@ -55,6 +57,18 @@ let names = [
   "markdown",
   "github"
 ];
+
+darkLightButton.addEventListener("click", function() {
+  body.classList.toggle("dark");
+  darkLightButton.classList.toggle("dark");
+  input.classList.toggle('dark');
+  if (input.classList.contains('dark')) {
+    input.style.border = '3px solid whitesmoke';
+  }
+  else {
+    input.style.border = '3px solid #1d2935';
+  }
+});
 
 function init() {
   time = 30;
@@ -84,7 +98,12 @@ function gameOver() {
 }
 
 function newWord() {
-  input.style.border = "3px solid #1d2935";
+  if (input.classList.contains('dark')) {
+    input.style.border = '3px solid whitesmoke';
+  }
+  else {
+    input.style.border = '3px solid #1d2935';
+  }
   if (!nextWord) {
     currentWord = names[Math.floor(Math.random() * names.length)];
     nextWord = names[Math.floor(Math.random() * names.length)];
@@ -101,7 +120,12 @@ input.addEventListener("keyup", function() {
     startTimer();
   }
   if (input.value === "") {
-    input.style.border = "3px solid #1d2935";
+    if (input.classList.contains('dark')) {
+      input.style.border = '3px solid whitesmoke';
+    }
+    else {
+      input.style.border = '3px solid #1d2935';
+    }
   } else if (input.value === currentWord) {
     score++;
     input.value = null;
@@ -121,7 +145,7 @@ input.addEventListener("keyup", function() {
 window.onload = function() {
   input.onpaste = function(e) {
     e.preventDefault();
-  }
- }
+  };
+};
 
 init();
