@@ -53,7 +53,7 @@ let names = [
   "svg",
   "variable",
   "loop",
-  "edge",
+  "IE11",
   "markdown",
   "github"
 ];
