@@ -2,6 +2,7 @@
   box-sizing: border-box;
 }
 body {
+  text-align: center;
   transition: all 0.3s;
   color: #1d2935;
   background-color: whitesmoke;
@@ -37,7 +38,7 @@ p {
 
 
 .game {
-  transition: border 0.3s;
+  transition: all 0.3s;
   text-align: left;
   display: block;
   margin: 48px auto;
@@ -59,11 +60,13 @@ p {
 }
 
 .current-word {
-  margin-top: 24vh;
+  display: block;
+  margin-top: 80px;
   text-align: center;
   font-size: 40px;
 }
 .next-word {
+  display: block;
   opacity: 0.8;
   margin-top: 16px;
   text-align: center;
@@ -78,4 +81,26 @@ p {
   text-align: center;
   font-style: italic;
   font-size: 18px;
+}
+
+.score {
+  font-family: Monospace;
+  display: block;
+  padding: 8px;
+  font-size: 24px;
+}
+.score-display {
+  margin: 32px;
+  font-size: 20px;
+}
+
+.best-score {
+  font-family: Monospace;
+  display: block;
+  padding: 8px;
+  font-size: 24px;
+}
+.best-score-display {
+  margin: 32px;
+  font-size: 20px;
 }

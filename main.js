@@ -3,13 +3,14 @@ let nextWordBox = document.querySelector(".next-word");
 let timeBox = document.querySelector(".time");
 let currentWordBox = document.querySelector(".current-word");
 let darkLightButton = document.querySelector(".light-dark");
+let scoreBox = document.querySelector(".score");
+let bestScoreBox = document.querySelector(".best-score");
 let body = document.querySelector("body");
 
 let currentWord;
 let nextWord;
 
 let timer = false;
-let lastScore = 0;
 let bestScore = 0;
 
 let score;
@@ -74,10 +75,13 @@ darkLightButton.addEventListener("click", function() {
 });
 
 function init() {
+  input.value = null;
   time = 30;
   score = 0;
   timeBox.innerHTML = time;
   newWord();
+  printScore();
+  bestScoreBox.innerHTML = bestScore;
 }
 
 function startTimer() {
@@ -93,9 +97,9 @@ function startTimer() {
 
 function gameOver() {
   timer = false;
-  lastScore = score;
-  if (lastScore > bestScore) {
-    bestScore = lastScore;
+  if (score > bestScore) {
+    bestScore = score;
+    bestScoreBox.innerHTML = bestScore;
   }
   init();
 }
@@ -125,12 +129,8 @@ input.addEventListener("keyup", function(event) {
     setNormalBorder();
   } else if (input.value === currentWord + " ") {
     goodAnswer();
-
-    console.log(score, lastScore, bestScore);
   } else if (event.keyCode === 32) {
     badAnswer();
-
-    console.log(score, lastScore, bestScore);
   }
 });
 
@@ -139,6 +139,10 @@ window.onload = function() {
     e.preventDefault();
   };
 };
+
+function printScore() {
+  scoreBox.innerHTML = score;
+}
 
 function setNormalBorder() {
   if (input.classList.contains("dark")) {
@@ -157,21 +161,25 @@ function setRedBorder() {
 
 function goodAnswer() {
   setTimeout(setGreenBorder, 100);
-  setTimeout(setNormalBorder, 300);
-  setTimeout(setGreenBorder, 400);
-  setTimeout(setNormalBorder, 600);
-  newWord();
+  setTimeout(setNormalBorder, 250);
+  setTimeout(setGreenBorder, 350);
+  setTimeout(setNormalBorder, 500);
   score++;
+  if (score > bestScore) {
+    bestScore = score;
+    bestScoreBox.innerHTML = bestScore;
+  }
+  printScore();
+  newWord();
   input.value = null;
 }
 
 function badAnswer() {
   setTimeout(setRedBorder, 100);
-  setTimeout(setNormalBorder, 300);
-  setTimeout(setRedBorder, 400);
-  setTimeout(setNormalBorder, 600);
-  setTimeout(setRedBorder, 700);
-  setTimeout(setNormalBorder, 900);
+  setTimeout(setNormalBorder, 250);
+  setTimeout(setRedBorder, 350);
+  setTimeout(setNormalBorder, 500);
+  printScore();
   newWord();
   input.value = null;
 }

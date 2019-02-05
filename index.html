@@ -6,15 +6,22 @@
     <title>FatFinger</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
-    <link rel="icon" type="image/png" href="imgs/keyboard.png">
+    <link rel="icon" type="image/png" href="imgs/keyboard.png" />
     <script defer src="main.js"></script>
   </head>
   <body>
+    <div class="score-display">
+      <div>Score</div>
+      <span class="score"></span>
+    </div>
     <button class="light-dark"></button>
-    <p class="current-word"></p>
-    <p class="next-word"></p>
-    <input autocapitalize="off" class="game">
+    <label for="game" class="current-word"></label>
+    <label for="game" class="next-word"></label>
+    <input autocapitalize="off" class="game" name="game" id="game" />
     <div class="seconds"><span class="time"></span>s</div>
-    <div class="score-screen">  </div>
+    <div class="best-score-display">
+      <div>Best Score</div>
+      <span class="best-score"></span>
+    </div>
   </body>
 </html>
