@@ -163,10 +163,10 @@ function setNormalBorder() {
 }
 
 function setGreenBorder() {
-  input.style.border = "3px solid #2ecc71";
+  input.style.border = "3px solid #4cd137";
 }
 function setRedBorder() {
-  input.style.border = "3px solid #e74c3c";
+  input.style.border = "3px solid red";
 }
 
 function goodAnswer() {
