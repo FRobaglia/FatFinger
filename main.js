@@ -9,16 +9,20 @@ let body = document.querySelector("body");
 
 let currentWord;
 let nextWord;
-
 let timer = false;
-let bestScore;
-bestScore = localStorage.getItem("bestScore");
-if (!bestScore) {
-  bestScore = 0;
-}
-
 let score;
 let time;
+
+let gameMemory = {
+  bestScore: localStorage.getItem('bestScore'),
+  darkMode: localStorage.getItem('darkMode'),
+  firstVisit: localStorage.getItem('firstVisit')
+}
+
+gameMemory.bestScore = localStorage.getItem("bestScore");
+if (gameMemory.bestScore == null) {
+  gameMemory.bestScore = 0;
+}
 
 let names = [
   "hetic",
@@ -84,7 +88,7 @@ function init() {
   timeBox.innerHTML = time;
   newWord();
   printScore();
-  bestScoreBox.innerHTML = bestScore;
+  bestScoreBox.innerHTML = gameMemory.bestScore;
 }
 
 function startTimer() {
@@ -101,11 +105,11 @@ function startTimer() {
 
 function gameOver() {
   timer = false;
-  if (score > bestScore) {
-    bestScore = score;
-    localStorage.setItem('bestScore', bestScore);
-    bestScore = localStorage.getItem('bestScore');
-    bestScoreBox.innerHTML = bestScore;
+  if (score > gameMemory.bestScore) {
+    gameMemory.bestScore = score;
+    localStorage.setItem('bestScore', gameMemory.bestScore);
+    gameMemory.bestScore = localStorage.getItem('bestScore');
+    bestScoreBox.innerHTML = gameMemory.bestScore;
   }
   init();
 }
@@ -175,11 +179,11 @@ function goodAnswer() {
   setTimeout(setGreenBorder, 350);
   setTimeout(setNormalBorder, 500);
   score++;
-  if (score > bestScore) {
-    bestScore = score;
-    localStorage.setItem('bestScore', bestScore);
-    bestScore = localStorage.getItem('bestScore');
-    bestScoreBox.innerHTML = bestScore;
+  if (score > gameMemory.bestScore) {
+    gameMemory.bestScore = score;
+    localStorage.setItem('bestScore', gameMemory.bestScore);
+    gameMemory.bestScore = localStorage.getItem('bestScore');
+    bestScoreBox.innerHTML = gameMemory.bestScore;
   }
   printScore();
   newWord();
