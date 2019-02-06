@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>FatFinger</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="You have 30 seconds to type as much words as possible !" />
     <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
     <link rel="icon" type="image/png" href="imgs/keyboard.png" />
     <script defer src="main.js"></script>
@@ -20,10 +21,10 @@
         <span class="best-score"></span>
       </section>
     </header>
-    <button class="light-dark"></button>
+    <div name="mode" class="light-dark"></div>
     <label for="game" class="current-word"></label>
-    <label for="game" class="next-word"></label>
+    <span for="game" class="next-word"></span>
     <input autocapitalize="off" class="game" name="game" id="game" />
-    <div class="seconds"><span class="time"></span>s</div>
+    <secion class="seconds"><span class="time"></span>s</secion>
   </body>
 </html>
