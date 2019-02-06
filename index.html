@@ -10,18 +10,20 @@
     <script defer src="main.js"></script>
   </head>
   <body>
-    <div class="score-display">
-      <div>Score</div>
-      <span class="score"></span>
-    </div>
+    <header class="scores">
+      <section class="score-display">
+        <h1>Score</h1>
+        <span class="score"></span>
+      </section>
+      <section class="best-score-display">
+        <h1>Best Score</h1>
+        <span class="best-score"></span>
+      </section>
+    </header>
     <button class="light-dark"></button>
     <label for="game" class="current-word"></label>
     <label for="game" class="next-word"></label>
     <input autocapitalize="off" class="game" name="game" id="game" />
     <div class="seconds"><span class="time"></span>s</div>
-    <div class="best-score-display">
-      <div>Best Score</div>
-      <span class="best-score"></span>
-    </div>
   </body>
 </html>

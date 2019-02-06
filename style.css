@@ -16,14 +16,21 @@ p {
   padding: 0;
   margin: 0;
 }
+h1 {
+  white-space: nowrap;
+  font-weight: normal;
+  font-size: 20px;
+  padding: 0;
+  margin: 0;
+}
 *::selection {
   background: #2ecc71;
 }
 .light-dark {
   transition: filter 0.3s;
   position: absolute;
-  top: 24px;
-  left: 24px;
+  top: 16px;
+  left: 16px;
   cursor: pointer;
   border: none;
   outline: none;
@@ -61,7 +68,7 @@ p {
 
 .current-word {
   display: block;
-  margin-top: 40px;
+  margin-top: 20px;
   text-align: center;
   font-size: 40px;
 }
@@ -74,13 +81,18 @@ p {
 }
 
 .time {
-  font-size: 32px;
+  font-size: 40px;
   font-style: normal;
 }
 .seconds {
   text-align: center;
   font-style: italic;
   font-size: 18px;
+}
+
+.scores {
+  display: flex;
+  justify-content: center;
 }
 
 .score {
@@ -90,6 +102,7 @@ p {
   font-size: 24px;
 }
 .score-display {
+  width: 150px;
   margin: 32px;
   font-size: 20px;
 }
@@ -101,6 +114,7 @@ p {
   font-size: 24px;
 }
 .best-score-display {
+  width: 150px;
   margin: 32px;
   font-size: 20px;
 }
