@@ -16,6 +16,7 @@ bestScore = localStorage.getItem("bestScore");
 if (!bestScore) {
   bestScore = 0;
 }
+
 let score;
 let time;
 
@@ -68,9 +69,7 @@ let names = [
 
 darkLightButton.addEventListener("click", function() {
   body.classList.toggle("dark");
-  darkLightButton.classList.toggle("dark");
-  input.classList.toggle("dark");
-  if (input.classList.contains("dark")) {
+  if (body.classList.contains("dark")) {
     input.style.border = "3px solid whitesmoke";
   } else {
     input.style.border = "3px solid #1d2935";
@@ -170,6 +169,7 @@ function setRedBorder() {
 }
 
 function goodAnswer() {
+  input.value = null;
   setTimeout(setGreenBorder, 100);
   setTimeout(setNormalBorder, 250);
   setTimeout(setGreenBorder, 350);
@@ -183,16 +183,16 @@ function goodAnswer() {
   }
   printScore();
   newWord();
-  input.value = null;
 }
 
 function badAnswer() {
+  input.value = null;
   setTimeout(setRedBorder, 100);
   setTimeout(setNormalBorder, 250);
   setTimeout(setRedBorder, 350);
   setTimeout(setNormalBorder, 500);
   printScore();
   newWord();
-  input.value = null;
 }
+
 init();
