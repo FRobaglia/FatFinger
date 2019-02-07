@@ -1,3 +1,4 @@
+// html elements
 let input = document.querySelector(`.game`);
 let nextWordBox = document.querySelector(`.next-word`);
 let timeBox = document.querySelector(`.time`);
@@ -7,33 +8,45 @@ let scoreBox = document.querySelector(`.score`);
 let bestScoreBox = document.querySelector(`.best-score`);
 let body = document.querySelector(`body`);
 
-let currentWord;
-let nextWord;
-let timer = false;
-let score;
-let time;
+// game informations
 
-let gameMemory = {
+let game = {
+  currentWord: null,
+  nextWord: null,
+  currentTime: null,
+  timerIsActive: false,
+  score: null,
   bestScore: localStorage.getItem(`bestScore`),
   displayMode: localStorage.getItem(`displayMode`),
-  firstVisit: localStorage.getItem(`firstVisit`)
+  tutorial: localStorage.getItem(`tutorial`)
 };
 
-// define if bestScore already exists in localstorage
-gameMemory.bestScore = localStorage.getItem(`bestScore`);
-if (gameMemory.bestScore == null) {
-  gameMemory.bestScore = 0;
+// define bestScore depending on his value in local storage (best score of user)
+
+if (game.bestScore == null) {
+  game.bestScore = 0;
+  localStorage.setItem("bestScore", game.bestScore);
 }
 
-// define if displayMode already exists in local storage
-gameMemory.displayMode = localStorage.getItem(`displayMode`);
-if (gameMemory.displayMode === `dark`) {
+// define displayMode depending on his value in local storage(last mode selected by user)
+
+if (game.displayMode === `dark`) {
   body.classList.toggle(`dark`);
   input.style.border = `3px solid whitesmoke`;
-} else if (gameMemory.displayMode == null) {
-  gameMemory.displayMode = `light`;
-  localStorage.setItem(`displayMode`, gameMemory.displayMode);
+} else if (game.displayMode == null) {
+  game.displayMode = `light`;
+  localStorage.setItem(`displayMode`, game.displayMode);
 }
+
+// define tutorial to true if user never visited this website
+
+if (game.tutorial !== "done") {
+  // tutorial();
+  game.tutorial = "done";
+  localStorage.setItem("tutorial", game.tutorial);
+}
+
+// Array of all possible words
 
 let names = [
   `hetic`,
@@ -83,81 +96,85 @@ let names = [
 ];
 
 darkLightButton.addEventListener(`click`, function() {
-  if (gameMemory.displayMode === `dark`) {
-    gameMemory.displayMode = `light`;
+  if (game.displayMode === `dark`) {
+    game.displayMode = `light`;
+  } else if (game.displayMode === `light`) {
+    game.displayMode = `dark`;
   }
-  else if (gameMemory.displayMode === `light`) {
-    gameMemory.displayMode = `dark`;
-  }
-  localStorage.setItem(`displayMode`, gameMemory.displayMode);
+  localStorage.setItem(`displayMode`, game.displayMode);
   body.classList.toggle(`dark`);
-  if (gameMemory.displayMode === `dark`) {
+  if (game.displayMode === `dark`) {
     input.style.border = `3px solid whitesmoke`;
-  } else if (gameMemory.displayMode === `light`) {
+  } else if (game.displayMode === `light`) {
     input.style.border = `3px solid #1d2935`;
   }
 });
 
 function init() {
+  // Resets the game
   input.value = null;
   input.placeholder = `type to start`;
-  time = 30;
+  game.currentTime = 30;
   score = 0;
-  timeBox.innerHTML = time;
+  timeBox.innerHTML = game.currentTime;
   newWord();
-  printScore();
-  bestScoreBox.innerHTML = gameMemory.bestScore;
+  printScore(scoreBox);
+  bestScoreBox.innerHTML = game.bestScore;
 }
 
-function startTimer() {
+function timer() {
   input.placeholder = ``;
-  timer = true;
-  time--;
-  timeBox.innerHTML = time;
-  if (time > -1) {
-    setTimeout(startTimer, 1000);
+  game.timerIsActive = true;
+  game.currentTime--;
+  timeBox.innerHTML = game.currentTime;
+  if (game.currentTime > -1) {
+    setTimeout(timer, 1000);
   } else {
     gameOver();
   }
 }
 
-function gameOver() {
-  timer = false;
-  if (score > gameMemory.bestScore) {
-    gameMemory.bestScore = score;
-    localStorage.setItem(`bestScore`, gameMemory.bestScore);
-    gameMemory.bestScore = localStorage.getItem(`bestScore`);
-    bestScoreBox.innerHTML = gameMemory.bestScore;
+function checkNewRecord() {
+  if (score > game.bestScore) {
+    game.bestScore = score;
+    localStorage.setItem(`bestScore`, game.bestScore);
+    game.bestScore = localStorage.getItem(`bestScore`);
+    bestScoreBox.innerHTML = game.bestScore;
   }
+}
+
+function gameOver() {
+  game.timerIsActive = false;
+  checkNewRecord();
   init();
 }
 
 function newWord() {
-  if (gameMemory.displayMode === `dark`) {
+  if (game.displayMode === `dark`) {
     input.style.border = `3px solid whitesmoke`;
   } else {
     input.style.border = `3px solid #1d2935`;
   }
-  if (!nextWord) {
-    currentWord = names[Math.floor(Math.random() * names.length)];
-    nextWord = names[Math.floor(Math.random() * names.length)];
+  if (!game.nextWord) {
+    game.currentWord = names[Math.floor(Math.random() * names.length)];
+    game.nextWord = names[Math.floor(Math.random() * names.length)];
   } else {
-    currentWord = nextWord;
-    nextWord = names[Math.floor(Math.random() * names.length)];
+    game.currentWord = game.nextWord;
+    game.nextWord = names[Math.floor(Math.random() * names.length)];
   }
-  currentWordBox.innerHTML = currentWord;
-  nextWordBox.innerHTML = nextWord;
+  currentWordBox.innerHTML = game.currentWord;
+  nextWordBox.innerHTML = game.nextWord;
 }
 
 input.addEventListener(`keyup`, function(event) {
-  if (!timer) {
-    startTimer();
+  if (!game.timerIsActive) {
+    timer();
   }
   if (input.value === ``) {
     setNormalBorder();
   } else if (
-    input.value === currentWord + ` ` ||
-    (input.value === currentWord && event.keyCode === 13)
+    input.value === game.currentWord + ` ` ||
+    (input.value === game.currentWord && event.keyCode === 13)
   ) {
     goodAnswer();
   } else if (event.keyCode === 32 || event.keyCode === 13) {
@@ -166,23 +183,23 @@ input.addEventListener(`keyup`, function(event) {
 });
 
 window.onload = function() {
+  // Disable copypaste in input to avoid cheating
   input.onpaste = function(e) {
     e.preventDefault();
   };
 };
 
-function printScore() {
-  scoreBox.innerHTML = score;
+function printScore(element) {
+  element.innerHTML = score;
 }
 
 function setNormalBorder() {
-  if (input.classList.contains(`dark`)) {
+  if (game.displayMode === `dark`) {
     input.style.border = `3px solid whitesmoke`;
   } else {
     input.style.border = `3px solid #1d2935`;
   }
 }
-
 function setGreenBorder() {
   input.style.border = `3px solid #4cd137`;
 }
@@ -197,13 +214,8 @@ function goodAnswer() {
   setTimeout(setGreenBorder, 350);
   setTimeout(setNormalBorder, 500);
   score++;
-  if (score > gameMemory.bestScore) {
-    gameMemory.bestScore = score;
-    localStorage.setItem(`bestScore`, gameMemory.bestScore);
-    gameMemory.bestScore = localStorage.getItem(`bestScore`);
-    bestScoreBox.innerHTML = gameMemory.bestScore;
-  }
-  printScore();
+  checkNewRecord();
+  printScore(scoreBox);
   newWord();
 }
 
@@ -213,7 +225,7 @@ function badAnswer() {
   setTimeout(setNormalBorder, 250);
   setTimeout(setRedBorder, 350);
   setTimeout(setNormalBorder, 500);
-  printScore();
+  printScore(scoreBox);
   newWord();
 }
 
