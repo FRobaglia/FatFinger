@@ -1,11 +1,11 @@
-let input = document.querySelector(".game");
-let nextWordBox = document.querySelector(".next-word");
-let timeBox = document.querySelector(".time");
-let currentWordBox = document.querySelector(".current-word");
-let darkLightButton = document.querySelector(".light-dark");
-let scoreBox = document.querySelector(".score");
-let bestScoreBox = document.querySelector(".best-score");
-let body = document.querySelector("body");
+let input = document.querySelector(`.game`);
+let nextWordBox = document.querySelector(`.next-word`);
+let timeBox = document.querySelector(`.time`);
+let currentWordBox = document.querySelector(`.current-word`);
+let darkLightButton = document.querySelector(`.light-dark`);
+let scoreBox = document.querySelector(`.score`);
+let bestScoreBox = document.querySelector(`.best-score`);
+let body = document.querySelector(`body`);
 
 let currentWord;
 let nextWord;
@@ -14,75 +14,93 @@ let score;
 let time;
 
 let gameMemory = {
-  bestScore: localStorage.getItem('bestScore'),
-  darkMode: localStorage.getItem('darkMode'),
-  firstVisit: localStorage.getItem('firstVisit')
-}
+  bestScore: localStorage.getItem(`bestScore`),
+  displayMode: localStorage.getItem(`displayMode`),
+  firstVisit: localStorage.getItem(`firstVisit`)
+};
 
-gameMemory.bestScore = localStorage.getItem("bestScore");
+// define if bestScore already exists in localstorage
+gameMemory.bestScore = localStorage.getItem(`bestScore`);
 if (gameMemory.bestScore == null) {
   gameMemory.bestScore = 0;
 }
 
+// define if displayMode already exists in local storage
+gameMemory.displayMode = localStorage.getItem(`displayMode`);
+if (gameMemory.displayMode === `dark`) {
+  body.classList.toggle(`dark`);
+  input.style.border = `3px solid whitesmoke`;
+} else if (gameMemory.displayMode == null) {
+  gameMemory.displayMode = `light`;
+  localStorage.setItem(`displayMode`, gameMemory.displayMode);
+}
+
 let names = [
-  "hetic",
-  "chrome",
-  "javascript",
-  "front-end",
-  "framework",
-  "canvas",
-  "html",
-  "css",
-  "library",
-  "terminal",
-  "bash",
-  "figma",
-  "sketch",
-  "npm",
-  "sass",
-  "internet",
-  "class",
-  "semantic",
-  "full-stack",
-  "design",
-  "firefox",
-  "cookies",
-  "parcel",
-  "flex",
-  "display",
-  "header",
-  "php",
-  "sql",
-  "back-end",
-  "indentation",
-  "codepen",
-  "database",
-  "function",
-  "responsive",
-  "svg",
-  "variable",
-  "loop",
-  "IE11",
-  "markdown",
-  "github",
-  "push",
-  "pull",
-  "commit",
-  "defer"
+  `hetic`,
+  `chrome`,
+  `javascript`,
+  `front-end`,
+  `framework`,
+  `canvas`,
+  `html`,
+  `css`,
+  `library`,
+  `terminal`,
+  `bash`,
+  `figma`,
+  `sketch`,
+  `npm`,
+  `sass`,
+  `internet`,
+  `class`,
+  `semantic`,
+  `full-stack`,
+  `design`,
+  `firefox`,
+  `cookies`,
+  `parcel`,
+  `flex`,
+  `display`,
+  `header`,
+  `php`,
+  `sql`,
+  `back-end`,
+  `indentation`,
+  `codepen`,
+  `database`,
+  `function`,
+  `responsive`,
+  `svg`,
+  `variable`,
+  `loop`,
+  `IE11`,
+  `markdown`,
+  `github`,
+  `push`,
+  `pull`,
+  `commit`,
+  `defer`
 ];
 
-darkLightButton.addEventListener("click", function() {
-  body.classList.toggle("dark");
-  if (body.classList.contains("dark")) {
-    input.style.border = "3px solid whitesmoke";
-  } else {
-    input.style.border = "3px solid #1d2935";
+darkLightButton.addEventListener(`click`, function() {
+  if (gameMemory.displayMode === `dark`) {
+    gameMemory.displayMode = `light`;
+  }
+  else if (gameMemory.displayMode === `light`) {
+    gameMemory.displayMode = `dark`;
+  }
+  localStorage.setItem(`displayMode`, gameMemory.displayMode);
+  body.classList.toggle(`dark`);
+  if (gameMemory.displayMode === `dark`) {
+    input.style.border = `3px solid whitesmoke`;
+  } else if (gameMemory.displayMode === `light`) {
+    input.style.border = `3px solid #1d2935`;
   }
 });
 
 function init() {
   input.value = null;
-  input.placeholder = "type to start";
+  input.placeholder = `type to start`;
   time = 30;
   score = 0;
   timeBox.innerHTML = time;
@@ -92,7 +110,7 @@ function init() {
 }
 
 function startTimer() {
-  input.placeholder = "";
+  input.placeholder = ``;
   timer = true;
   time--;
   timeBox.innerHTML = time;
@@ -107,18 +125,18 @@ function gameOver() {
   timer = false;
   if (score > gameMemory.bestScore) {
     gameMemory.bestScore = score;
-    localStorage.setItem('bestScore', gameMemory.bestScore);
-    gameMemory.bestScore = localStorage.getItem('bestScore');
+    localStorage.setItem(`bestScore`, gameMemory.bestScore);
+    gameMemory.bestScore = localStorage.getItem(`bestScore`);
     bestScoreBox.innerHTML = gameMemory.bestScore;
   }
   init();
 }
 
 function newWord() {
-  if (input.classList.contains("dark")) {
-    input.style.border = "3px solid whitesmoke";
+  if (gameMemory.displayMode === `dark`) {
+    input.style.border = `3px solid whitesmoke`;
   } else {
-    input.style.border = "3px solid #1d2935";
+    input.style.border = `3px solid #1d2935`;
   }
   if (!nextWord) {
     currentWord = names[Math.floor(Math.random() * names.length)];
@@ -131,14 +149,14 @@ function newWord() {
   nextWordBox.innerHTML = nextWord;
 }
 
-input.addEventListener("keyup", function(event) {
+input.addEventListener(`keyup`, function(event) {
   if (!timer) {
     startTimer();
   }
-  if (input.value === "") {
+  if (input.value === ``) {
     setNormalBorder();
   } else if (
-    input.value === currentWord + " " ||
+    input.value === currentWord + ` ` ||
     (input.value === currentWord && event.keyCode === 13)
   ) {
     goodAnswer();
@@ -158,18 +176,18 @@ function printScore() {
 }
 
 function setNormalBorder() {
-  if (input.classList.contains("dark")) {
-    input.style.border = "3px solid whitesmoke";
+  if (input.classList.contains(`dark`)) {
+    input.style.border = `3px solid whitesmoke`;
   } else {
-    input.style.border = "3px solid #1d2935";
+    input.style.border = `3px solid #1d2935`;
   }
 }
 
 function setGreenBorder() {
-  input.style.border = "3px solid #4cd137";
+  input.style.border = `3px solid #4cd137`;
 }
 function setRedBorder() {
-  input.style.border = "3px solid red";
+  input.style.border = `3px solid red`;
 }
 
 function goodAnswer() {
@@ -181,8 +199,8 @@ function goodAnswer() {
   score++;
   if (score > gameMemory.bestScore) {
     gameMemory.bestScore = score;
-    localStorage.setItem('bestScore', gameMemory.bestScore);
-    gameMemory.bestScore = localStorage.getItem('bestScore');
+    localStorage.setItem(`bestScore`, gameMemory.bestScore);
+    gameMemory.bestScore = localStorage.getItem(`bestScore`);
     bestScoreBox.innerHTML = gameMemory.bestScore;
   }
   printScore();
