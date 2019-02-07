@@ -115,10 +115,9 @@ function init() {
   input.value = null;
   input.placeholder = `type to start`;
   game.currentTime = 30;
-  score = 0;
+  game.score = 0;
   timeBox.innerHTML = game.currentTime;
   newWord();
-  printScore(scoreBox);
   bestScoreBox.innerHTML = game.bestScore;
 }
 
@@ -135,8 +134,8 @@ function timer() {
 }
 
 function checkNewRecord() {
-  if (score > game.bestScore) {
-    game.bestScore = score;
+  if (game.score > game.bestScore) {
+    game.bestScore = game.score;
     localStorage.setItem(`bestScore`, game.bestScore);
     game.bestScore = localStorage.getItem(`bestScore`);
     bestScoreBox.innerHTML = game.bestScore;
@@ -150,11 +149,8 @@ function gameOver() {
 }
 
 function newWord() {
-  if (game.displayMode === `dark`) {
-    input.style.border = `3px solid whitesmoke`;
-  } else {
-    input.style.border = `3px solid #1d2935`;
-  }
+  printScore(scoreBox);
+  input.value = null;
   if (!game.nextWord) {
     game.currentWord = names[Math.floor(Math.random() * names.length)];
     game.nextWord = names[Math.floor(Math.random() * names.length)];
@@ -182,15 +178,8 @@ input.addEventListener(`keyup`, function(event) {
   }
 });
 
-window.onload = function() {
-  // Disable copypaste in input to avoid cheating
-  input.onpaste = function(e) {
-    e.preventDefault();
-  };
-};
-
 function printScore(element) {
-  element.innerHTML = score;
+  element.innerHTML = game.score;
 }
 
 function setNormalBorder() {
@@ -208,25 +197,28 @@ function setRedBorder() {
 }
 
 function goodAnswer() {
-  input.value = null;
+  game.score++;
+  newWord();
   setTimeout(setGreenBorder, 100);
   setTimeout(setNormalBorder, 250);
   setTimeout(setGreenBorder, 350);
   setTimeout(setNormalBorder, 500);
-  score++;
   checkNewRecord();
-  printScore(scoreBox);
-  newWord();
 }
 
 function badAnswer() {
-  input.value = null;
+  newWord();
   setTimeout(setRedBorder, 100);
   setTimeout(setNormalBorder, 250);
   setTimeout(setRedBorder, 350);
   setTimeout(setNormalBorder, 500);
-  printScore(scoreBox);
-  newWord();
 }
+
+window.onload = function() {
+  // Disable copypaste in input to avoid cheating
+  input.onpaste = function(e) {
+    e.preventDefault();
+  };
+};
 
 init();
