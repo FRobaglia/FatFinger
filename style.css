@@ -135,13 +135,13 @@ body.dark .game {
   top: 100px;
 }
 
+.gamemodes.is-shown {
+  transform: translateX(300px);
+}
+
 .dark .gamemodes {
   background-color: whitesmoke;
   color: #1d2935;
-}
-
-.gamemodes:hover {
-  transform: translateX(300px);
 }
 
 .gamemodes__list {
@@ -158,11 +158,8 @@ body.dark .game {
 .gamemodes__list li:not(:last-child) {
   width: 100px;
 }
-
 .gamemodes__list li:hover {
-  transition: color 0.3s;
-}
-.gamemodes__list li:hover {
+  font-weight: bold;
   color: rgb(46, 204, 113);
 }
 

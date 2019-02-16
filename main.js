@@ -8,46 +8,20 @@ let scoreBox = document.querySelector(`.score`);
 let bestScoreBox = document.querySelector(`.best-score`);
 let body = document.querySelector(`body`);
 
-// game informations
+let jsWords = [
+  `hi();`,
+  `for (let i = 0; i < a.length; i++)`,
+  `for (let i = 0; i > a.length; i--)`,
+  `let user = { name: John, age: 21 }`,
+  `let numbers = [1, 2, 3, 4, 5]`,
+  `var myString = 'Hello World'`,
+  `const pi = 3.14159265`,
+  `if (birthday) { user.age++; }`,
+  `// some comment`,
+  
+];
 
-let game = {
-  currentWord: null,
-  nextWord: null,
-  currentTime: null,
-  timerIsActive: false,
-  score: null,
-  bestScore: localStorage.getItem(`bestScore`),
-  displayMode: localStorage.getItem(`displayMode`),
-  tutorial: localStorage.getItem(`tutorial`)
-};
-
-// define bestScore depending on his value in local storage (best score of user)
-
-if (game.bestScore == null) {
-  game.bestScore = 0;
-  localStorage.setItem("bestScore", game.bestScore);
-}
-
-// define displayMode depending on his value in local storage(last mode selected by user)
-
-if (game.displayMode === `dark`) {
-  body.classList.toggle(`dark`);
-} else if (game.displayMode == null) {
-  game.displayMode = `light`;
-  localStorage.setItem(`displayMode`, game.displayMode);
-}
-
-// define tutorial to true if user never visited this website
-
-if (game.tutorial !== "done") {
-  // tutorial();
-  game.tutorial = "done";
-  localStorage.setItem("tutorial", game.tutorial);
-}
-
-// Array of all possible words
-
-let words = [
+let webWords = [
   `hetic`,
   `chrome`,
   `javascript`,
@@ -93,6 +67,57 @@ let words = [
   `commit`,
   `defer`
 ];
+
+// game informations
+
+let game = {
+  currentWord: null,
+  nextWord: null,
+  currentTime: null,
+  timerIsActive: false,
+  score: null,
+  bestScore: localStorage.getItem(`bestScore`),
+  displayMode: localStorage.getItem(`displayMode`),
+  tutorial: localStorage.getItem(`tutorial`),
+  words: webWords
+};
+
+
+if (localStorage.getItem("gameMode") == "web") {  
+  game.words = webWords;
+  localStorage.setItem("gameMode", "web");
+}
+else if (localStorage.getItem("gameMode") == "js") {
+  game.words = jsWords;
+  localStorage.setItem("gameMode", "js");
+}
+else if (localStorage.getItem("gameMode") == null) {
+  localStorage.setItem("gameMode", "web");
+}
+
+// define bestScore if null
+
+if (game.bestScore == null) {
+  game.bestScore = 0;
+  localStorage.setItem("bestScore", game.bestScore);
+}
+
+// define displayMode depending on his value in local storage(last mode selected by user)
+
+if (game.displayMode === `dark`) {
+  body.classList.toggle(`dark`);
+} else if (game.displayMode == null) {
+  game.displayMode = `light`;
+  localStorage.setItem(`displayMode`, game.displayMode);
+}
+
+// define tutorial to true if user never visited this website
+
+if (game.tutorial !== "done") {
+  // tutorial();
+  game.tutorial = "done";
+  localStorage.setItem("tutorial", game.tutorial);
+}
 
 darkLightButton.addEventListener(`click`, function() {
   if (game.displayMode === `dark`) {
@@ -146,13 +171,18 @@ function newWord() {
   printScore(scoreBox);
   input.value = null;
   if (!game.nextWord) {
-    game.currentWord = words[Math.floor(Math.random() * words.length)];
-    game.nextWord = words[Math.floor(Math.random() * words.length)];
+    game.currentWord = game.words[Math.floor(Math.random() * game.words.length)];
+    game.nextWord = game.words[Math.floor(Math.random() * game.words.length)];
+    while (game.nextWord === game.currentWord) {
+      // roll word again if it's same than current word
+      game.nextWord = game.words[Math.floor(Math.random() * game.words.length)];
+    }
   } else {
     game.currentWord = game.nextWord;
-    game.nextWord = words[Math.floor(Math.random() * words.length)];
+    game.nextWord = game.words[Math.floor(Math.random() * game.words.length)];
     while (game.nextWord === game.currentWord) {
-      game.nextWord = words[Math.floor(Math.random() * words.length)];
+      // roll word again if it's same than current word
+      game.nextWord = game.words[Math.floor(Math.random() * game.words.length)];
     }
   }
   currentWordBox.innerHTML = game.currentWord;
@@ -216,67 +246,18 @@ window.onload = function() {
 let modes = document.querySelectorAll(".gamemodes__list li");
 
 modes[0].addEventListener("click", function() {
-  words = [
-    `hetic`,
-    `chrome`,
-    `javascript`,
-    `front-end`,
-    `framework`,
-    `canvas`,
-    `html`,
-    `css`,
-    `library`,
-    `terminal`,
-    `bash`,
-    `figma`,
-    `sketch`,
-    `npm`,
-    `sass`,
-    `internet`,
-    `class`,
-    `semantic`,
-    `full-stack`,
-    `design`,
-    `firefox`,
-    `cookies`,
-    `parcel`,
-    `flex`,
-    `display`,
-    `header`,
-    `php`,
-    `sql`,
-    `back-end`,
-    `indentation`,
-    `codepen`,
-    `database`,
-    `function`,
-    `responsive`,
-    `svg`,
-    `variable`,
-    `loop`,
-    `IE11`,
-    `markdown`,
-    `github`,
-    `push`,
-    `pull`,
-    `commit`,
-    `defer`
-  ];
-  game.currentWord = words[Math.floor(Math.random() * words.length)];
-  game.nextWord = words[Math.floor(Math.random() * words.length)];
+  localStorage.setItem("gameMode", "web");
+  game.words = webWords;
+  game.currentWord = game.words[Math.floor(Math.random() * game.words.length)];
+  game.nextWord = game.words[Math.floor(Math.random() * game.words.length)];
   gameOver();
 });
 
 modes[1].addEventListener("click", function() {
-  words = [
-    `hi();`,
-    `for (let i = 0; i < a.length; i++)`,
-    `for (let i = 0; i > a.length; i--)`,
-    `let user = { name: John, age: 21 }`,
-    `if (birthday) { user.age++; }`
-  ];
-  game.currentWord = words[Math.floor(Math.random() * words.length)];
-  game.nextWord = words[Math.floor(Math.random() * words.length)];
+  localStorage.setItem("gameMode", "js");
+  game.words = jsWords;
+  game.currentWord = game.words[Math.floor(Math.random() * game.words.length)];
+  game.nextWord = game.words[Math.floor(Math.random() * game.words.length)];
   gameOver();
   game.currentTime = 160;
   timeBox.innerHTML = game.currentTime;
@@ -285,5 +266,14 @@ modes[1].addEventListener("click", function() {
 modes[2].addEventListener("click", function() {
   // change array
 });
+
+modes[3].addEventListener("click", function() {
+  document.querySelector('.gamemodes').classList.remove('is-shown');
+});
+
+// done in js cause mouseover behavior !== css hover behavior
+document.querySelector('.gamemodes').addEventListener('mouseover', function() {
+  document.querySelector('.gamemodes').classList.add('is-shown');
+})
 
 init();
