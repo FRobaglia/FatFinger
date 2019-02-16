@@ -32,7 +32,6 @@ if (game.bestScore == null) {
 
 if (game.displayMode === `dark`) {
   body.classList.toggle(`dark`);
-  input.style.border = `3px solid whitesmoke`;
 } else if (game.displayMode == null) {
   game.displayMode = `light`;
   localStorage.setItem(`displayMode`, game.displayMode);
@@ -48,7 +47,7 @@ if (game.tutorial !== "done") {
 
 // Array of all possible words
 
-let names = [
+let words = [
   `hetic`,
   `chrome`,
   `javascript`,
@@ -103,11 +102,6 @@ darkLightButton.addEventListener(`click`, function() {
   }
   localStorage.setItem(`displayMode`, game.displayMode);
   body.classList.toggle(`dark`);
-  if (game.displayMode === `dark`) {
-    input.style.border = `3px solid whitesmoke`;
-  } else if (game.displayMode === `light`) {
-    input.style.border = `3px solid #1d2935`;
-  }
 });
 
 function init() {
@@ -152,11 +146,14 @@ function newWord() {
   printScore(scoreBox);
   input.value = null;
   if (!game.nextWord) {
-    game.currentWord = names[Math.floor(Math.random() * names.length)];
-    game.nextWord = names[Math.floor(Math.random() * names.length)];
+    game.currentWord = words[Math.floor(Math.random() * words.length)];
+    game.nextWord = words[Math.floor(Math.random() * words.length)];
   } else {
     game.currentWord = game.nextWord;
-    game.nextWord = names[Math.floor(Math.random() * names.length)];
+    game.nextWord = words[Math.floor(Math.random() * words.length)];
+    while (game.nextWord === game.currentWord) {
+      game.nextWord = words[Math.floor(Math.random() * words.length)];
+    }
   }
   currentWordBox.innerHTML = game.currentWord;
   nextWordBox.innerHTML = game.nextWord;
@@ -183,11 +180,7 @@ function printScore(element) {
 }
 
 function setNormalBorder() {
-  if (game.displayMode === `dark`) {
-    input.style.border = `3px solid whitesmoke`;
-  } else {
-    input.style.border = `3px solid #1d2935`;
-  }
+  input.style.border = "";
 }
 function setGreenBorder() {
   input.style.border = `3px solid #4cd137`;
@@ -198,12 +191,12 @@ function setRedBorder() {
 
 function goodAnswer() {
   game.score++;
+  checkNewRecord();
   newWord();
   setTimeout(setGreenBorder, 100);
   setTimeout(setNormalBorder, 250);
   setTimeout(setGreenBorder, 350);
   setTimeout(setNormalBorder, 500);
-  checkNewRecord();
 }
 
 function badAnswer() {

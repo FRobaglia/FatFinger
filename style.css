@@ -10,7 +10,7 @@ body {
 }
 body.dark {
   color: whitesmoke;
-  background-color: #1d2935;;
+  background-color: #1d2935;
 }
 p {
   padding: 0;
@@ -46,14 +46,13 @@ body.dark .light-dark {
   transform: scale(1.1) rotate(45deg);
 }
 
-
 .game {
   transition: all 0.3s;
   text-align: left;
   display: block;
   margin: 48px auto;
   margin-top: 24px;
-  border-radius: 5px;
+  border-radius: 6px;
   display: block;
   width: 250px;
   font-size: 30px;
@@ -62,8 +61,8 @@ body.dark .light-dark {
 }
 body.dark .game {
   border: 3px solid whitesmoke;
-  background-color: #11181f;
-  color: whitesmoke
+  background-color: #131b24;
+  color: whitesmoke;
 }
 .game:focus {
   outline: none;
@@ -120,4 +119,54 @@ body.dark .game {
   width: 150px;
   margin: 32px;
   font-size: 20px;
+}
+.gamemodes {
+  cursor: pointer;
+  transition: all 0.3s;
+  overflow: hidden;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  height: 80px;
+  width: 350px;
+  background-color: #1d2935;
+  color: whitesmoke;
+  position: absolute;
+  left: -300px;
+  top: 100px;
+}
+
+.dark .gamemodes {
+  background-color: whitesmoke;
+  color: #1d2935;
+}
+
+.gamemodes:hover {
+  transform: translateX(300px);
+}
+
+.gamemodes__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  display: flex;
+  width: 350px;
+  justify-content: left;
+  align-items: center;
+}
+
+.gamemodes__list li:not(:last-child) {
+  width: 100px;
+}
+
+.gamemodes__list li:hover {
+  transition: color 0.3s;
+}
+.gamemodes__list li:hover {
+  color: rgb(46, 204, 113);
+}
+
+.gamemodes__list li:last-child {
+  width: 50px;
+  font-size: 28px;
 }
