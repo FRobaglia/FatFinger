@@ -165,12 +165,9 @@ input.addEventListener(`keyup`, function(event) {
   }
   if (input.value === ``) {
     setNormalBorder();
-  } else if (
-    input.value === game.currentWord + ` ` ||
-    (input.value === game.currentWord && event.keyCode === 13)
-  ) {
+  } else if (input.value === game.currentWord && event.keyCode === 13) {
     goodAnswer();
-  } else if (event.keyCode === 32 || event.keyCode === 13) {
+  } else if (event.keyCode === 13) {
     badAnswer();
   }
 });
@@ -213,5 +210,80 @@ window.onload = function() {
     e.preventDefault();
   };
 };
+
+// switch modes
+
+let modes = document.querySelectorAll(".gamemodes__list li");
+
+modes[0].addEventListener("click", function() {
+  words = [
+    `hetic`,
+    `chrome`,
+    `javascript`,
+    `front-end`,
+    `framework`,
+    `canvas`,
+    `html`,
+    `css`,
+    `library`,
+    `terminal`,
+    `bash`,
+    `figma`,
+    `sketch`,
+    `npm`,
+    `sass`,
+    `internet`,
+    `class`,
+    `semantic`,
+    `full-stack`,
+    `design`,
+    `firefox`,
+    `cookies`,
+    `parcel`,
+    `flex`,
+    `display`,
+    `header`,
+    `php`,
+    `sql`,
+    `back-end`,
+    `indentation`,
+    `codepen`,
+    `database`,
+    `function`,
+    `responsive`,
+    `svg`,
+    `variable`,
+    `loop`,
+    `IE11`,
+    `markdown`,
+    `github`,
+    `push`,
+    `pull`,
+    `commit`,
+    `defer`
+  ];
+  game.currentWord = words[Math.floor(Math.random() * words.length)];
+  game.nextWord = words[Math.floor(Math.random() * words.length)];
+  gameOver();
+});
+
+modes[1].addEventListener("click", function() {
+  words = [
+    `hi();`,
+    `for (let i = 0; i < a.length; i++)`,
+    `for (let i = 0; i > a.length; i--)`,
+    `let user = { name: John, age: 21 }`,
+    `if (birthday) { user.age++; }`
+  ];
+  game.currentWord = words[Math.floor(Math.random() * words.length)];
+  game.nextWord = words[Math.floor(Math.random() * words.length)];
+  gameOver();
+  game.currentTime = 160;
+  timeBox.innerHTML = game.currentTime;
+});
+
+modes[2].addEventListener("click", function() {
+  // change array
+});
 
 init();
