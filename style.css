@@ -47,6 +47,7 @@ body.dark .light-dark {
 }
 
 .game {
+  font-family: monospace;
   transition: all 0.3s;
   text-align: left;
   display: block;
@@ -121,7 +122,6 @@ body.dark .game {
   font-size: 20px;
 }
 .gamemodes {
-  cursor: pointer;
   transition: all 0.3s;
   overflow: hidden;
   border-top-right-radius: 4px;
@@ -160,6 +160,7 @@ body.dark .game {
 }
 .gamemodes__list li:hover {
   font-weight: bold;
+  cursor: pointer;
   color: rgb(46, 204, 113);
 }
 
