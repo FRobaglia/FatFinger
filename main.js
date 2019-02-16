@@ -1,4 +1,4 @@
-// html elements
+// DOM
 let input = document.querySelector(`.game`);
 let nextWordBox = document.querySelector(`.next-word`);
 let timeBox = document.querySelector(`.time`);
@@ -7,10 +7,15 @@ let darkLightButton = document.querySelector(`.light-dark`);
 let scoreBox = document.querySelector(`.score`);
 let bestScoreBox = document.querySelector(`.best-score`);
 let body = document.querySelector(`body`);
+let soundBox = document.querySelector(".sound");
 
+let playSounds = true;
+
+// sounds
 let successSound = new Audio("assets/sounds/success.wav");
 let errorSound = new Audio("assets/sounds/error.wav");
 
+// words arrays
 let englishWords = [
   `time`,
   `person`,
@@ -74,12 +79,12 @@ let englishWords = [
 let jsWords = [
   `hi();`,
   `for (let i = 0; i < a.length; i++)`,
-  `for (let i = 0; i > a.length; i--)`,
-  `let user = { name: John, age: 21 };`,
+  `for (let i = 20; i > 0; i--)`,
+  `let user = { name: 'John', age: 21 };`,
   `let numbers = [1, 2, 3, 4, 5];`,
   `var myString = 'Hello World';`,
   `const pi = 3.14159265;`,
-  `if (birthday) { user.age++; }`,
+  `if (user.birthday) { user.age++; }`,
   `// some comment`
 ];
 
@@ -131,7 +136,6 @@ let webWords = [
 ];
 
 // game informations
-
 let game = {
   currentWord: null,
   nextWord: null,
@@ -141,9 +145,20 @@ let game = {
   bestScore: localStorage.getItem(`bestScore`),
   displayMode: localStorage.getItem(`displayMode`),
   tutorial: localStorage.getItem(`tutorial`),
-  words: englishWords
+  words: englishWords,
+  setWords() {
+    this.currentWord = this.words[
+      Math.floor(Math.random() * this.words.length)
+    ];
+    this.nextWord = this.words[Math.floor(Math.random() * this.words.length)];
+    while (this.nextWord === this.currentWord) {
+      // randomize word again if it's same than current word
+      this.nextWord = this.words[Math.floor(Math.random() * this.words.length)];
+    }
+  }
 };
 
+// localStorage settings
 if (localStorage.getItem("gameMode") == "english") {
   game.words = englishWords;
   localStorage.setItem("gameMode", "english");
@@ -157,14 +172,16 @@ if (localStorage.getItem("gameMode") == "english") {
   localStorage.setItem("gameMode", "english");
 }
 
-// define bestScore if null
-
+if (localStorage.getItem("playSounds") != "true") {
+  playSounds = false;
+  soundBox.style.backgroundPosition = "36px 0px";
+} else {
+  localStorage.setItem("playSounds", playSounds);
+}
 if (game.bestScore == null) {
   game.bestScore = 0;
   localStorage.setItem("bestScore", game.bestScore);
 }
-
-// define displayMode depending on his value in local storage(last mode selected by user)
 
 if (game.displayMode === `dark`) {
   body.classList.toggle(`dark`);
@@ -173,23 +190,11 @@ if (game.displayMode === `dark`) {
   localStorage.setItem(`displayMode`, game.displayMode);
 }
 
-// define tutorial to true if user never visited this website
-
 if (game.tutorial !== "done") {
   // tutorial();
   game.tutorial = "done";
   localStorage.setItem("tutorial", game.tutorial);
 }
-
-darkLightButton.addEventListener(`click`, function() {
-  if (game.displayMode === `dark`) {
-    game.displayMode = `light`;
-  } else if (game.displayMode === `light`) {
-    game.displayMode = `dark`;
-  }
-  localStorage.setItem(`displayMode`, game.displayMode);
-  body.classList.toggle(`dark`);
-});
 
 function init() {
   // Resets the game
@@ -197,12 +202,12 @@ function init() {
   input.placeholder = `type to start`;
   game.currentTime = 30;
   if (game.words === jsWords) {
-    game.currentTime = 160;
+    game.currentTime = 120;
   }
   game.score = 0;
   timeBox.innerHTML = game.currentTime;
-  newWord();
   bestScoreBox.innerHTML = game.bestScore;
+  newWord();
 }
 
 function timer() {
@@ -236,13 +241,7 @@ function newWord() {
   printScore(scoreBox);
   input.value = null;
   if (!game.nextWord) {
-    game.currentWord =
-      game.words[Math.floor(Math.random() * game.words.length)];
-    game.nextWord = game.words[Math.floor(Math.random() * game.words.length)];
-    while (game.nextWord === game.currentWord) {
-      // roll word again if it's same than current word
-      game.nextWord = game.words[Math.floor(Math.random() * game.words.length)];
-    }
+    game.setWords();
   } else {
     game.currentWord = game.nextWord;
     game.nextWord = game.words[Math.floor(Math.random() * game.words.length)];
@@ -259,9 +258,7 @@ input.addEventListener(`keyup`, function(event) {
   if (!game.timerIsActive) {
     timer();
   }
-  if (input.value === ``) {
-    setNormalBorder();
-  } else if (input.value === game.currentWord && event.keyCode === 13) {
+  if (input.value === game.currentWord && event.keyCode === 13) {
     goodAnswer();
   } else if (event.keyCode === 13) {
     badAnswer();
@@ -283,7 +280,9 @@ function setRedBorder() {
 }
 
 function goodAnswer() {
-  successSound.play();
+  if (playSounds) {
+    successSound.play();
+  }
   game.score++;
   checkNewRecord();
   newWord();
@@ -294,7 +293,9 @@ function goodAnswer() {
 }
 
 function badAnswer() {
-  errorSound.play();
+  if (playSounds) {
+    errorSound.play();
+  }
   newWord();
   setTimeout(setRedBorder, 100);
   setTimeout(setNormalBorder, 250);
@@ -309,31 +310,49 @@ window.onload = function() {
   };
 };
 
-// switch modes
+soundBox.addEventListener("click", function() {
+  playSounds = !playSounds;
+  localStorage.setItem("playSounds", playSounds);
+  if (playSounds) {
+    successSound.play();
+    soundBox.style.backgroundPosition = "0px 0px";
+  } else {
+    soundBox.style.backgroundPosition = "36px 0px";
+  }
+});
+darkLightButton.addEventListener(`click`, function() {
+  // lightmode/darkmode
+  if (game.displayMode === `dark`) {
+    game.displayMode = `light`;
+  } else if (game.displayMode === `light`) {
+    game.displayMode = `dark`;
+  }
+  localStorage.setItem(`displayMode`, game.displayMode);
+  body.classList.toggle(`dark`);
+});
+
+// switch words
 
 let modes = document.querySelectorAll(".gamemodes__list li");
 
 modes[0].addEventListener("click", function() {
   localStorage.setItem("gameMode", "english");
   game.words = englishWords;
-  game.currentWord = game.words[Math.floor(Math.random() * game.words.length)];
-  game.nextWord = game.words[Math.floor(Math.random() * game.words.length)];
+  game.setWords();
   gameOver();
 });
 
 modes[1].addEventListener("click", function() {
   localStorage.setItem("gameMode", "web");
   game.words = webWords;
-  game.currentWord = game.words[Math.floor(Math.random() * game.words.length)];
-  game.nextWord = game.words[Math.floor(Math.random() * game.words.length)];
+  game.setWords();
   gameOver();
 });
 
 modes[2].addEventListener("click", function() {
   localStorage.setItem("gameMode", "js");
   game.words = jsWords;
-  game.currentWord = game.words[Math.floor(Math.random() * game.words.length)];
-  game.nextWord = game.words[Math.floor(Math.random() * game.words.length)];
+  game.setWords();
   gameOver();
 });
 

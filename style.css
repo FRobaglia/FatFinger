@@ -32,8 +32,6 @@ h1 {
   top: 16px;
   left: 16px;
   cursor: pointer;
-  border: none;
-  outline: none;
   background: url("assets/imgs/sun.svg");
   background-size: cover;
   width: 36px;
@@ -46,6 +44,23 @@ body.dark .light-dark {
   transform: scale(1.1) rotate(45deg);
 }
 
+.sound {
+  position: absolute;
+  transition: filter 0.3s, transform 0.3s;
+  top: 16px;
+  left: 80px;
+  width: 36px;
+  height: 36px;
+  background: url("assets/imgs/sound.png");
+  background-position: px 0px;
+  cursor: pointer;
+}
+.sound:hover {
+  transform: scale(1.1);
+}
+.dark .sound {
+  filter: invert(100%);
+}
 .game {
   font-family: monospace;
   transition: all 0.3s;
