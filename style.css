@@ -34,7 +34,7 @@ h1 {
   cursor: pointer;
   border: none;
   outline: none;
-  background: url("imgs/sun.svg");
+  background: url("assets/imgs/sun.svg");
   background-size: cover;
   width: 36px;
   height: 36px;
@@ -124,19 +124,19 @@ body.dark .game {
 .gamemodes {
   transition: all 0.3s;
   overflow: hidden;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
   height: 80px;
-  width: 350px;
+  width: 450px;
   background-color: #1d2935;
   color: whitesmoke;
   position: absolute;
-  left: -300px;
-  top: 100px;
+  left: -400px;
+  top: 140px;
 }
 
 .gamemodes.is-shown {
-  transform: translateX(300px);
+  transform: translateX(400px);
 }
 
 .dark .gamemodes {
@@ -150,13 +150,13 @@ body.dark .game {
   padding: 0;
   height: 100%;
   display: flex;
-  width: 350px;
+  width: 450px;
   justify-content: left;
   align-items: center;
 }
 
 .gamemodes__list li:not(:last-child) {
-  width: 100px;
+  min-width: 100px;
 }
 .gamemodes__list li:hover {
   font-weight: bold;
@@ -165,6 +165,6 @@ body.dark .game {
 }
 
 .gamemodes__list li:last-child {
-  width: 50px;
+  min-width: 50px;
   font-size: 28px;
 }

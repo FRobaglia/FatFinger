@@ -8,6 +8,69 @@ let scoreBox = document.querySelector(`.score`);
 let bestScoreBox = document.querySelector(`.best-score`);
 let body = document.querySelector(`body`);
 
+let successSound = new Audio("assets/sounds/success.wav");
+let errorSound = new Audio("assets/sounds/error.wav");
+
+let englishWords = [
+  `time`,
+  `person`,
+  `year`,
+  `way`,
+  `day`,
+  `thing`,
+  `man`,
+  `world`,
+  `life`,
+  `hand`,
+  `part`,
+  `child`,
+  `eye`,
+  `woman`,
+  `place`,
+  `work`,
+  `week`,
+  `case`,
+  `point`,
+  `government`,
+  `company`,
+  `number`,
+  `group`,
+  `problem`,
+  `fact`,
+  `be`,
+  `have`,
+  `do`,
+  `say`,
+  `get`,
+  `make`,
+  `go`,
+  `know`,
+  `take`,
+  `see`,
+  `good`,
+  `new`,
+  `first`,
+  `last`,
+  `long`,
+  `great`,
+  `little`,
+  `own`,
+  `other`,
+  `old`,
+  `right`,
+  `big`,
+  `the`,
+  `and`,
+  `a`,
+  `that`,
+  `it`,
+  `not`,
+  `he`,
+  `as`,
+  `but`,
+  `or`
+];
+
 let jsWords = [
   `hi();`,
   `for (let i = 0; i < a.length; i++)`,
@@ -17,8 +80,7 @@ let jsWords = [
   `var myString = 'Hello World';`,
   `const pi = 3.14159265;`,
   `if (birthday) { user.age++; }`,
-  `// some comment`,
-  
+  `// some comment`
 ];
 
 let webWords = [
@@ -79,20 +141,20 @@ let game = {
   bestScore: localStorage.getItem(`bestScore`),
   displayMode: localStorage.getItem(`displayMode`),
   tutorial: localStorage.getItem(`tutorial`),
-  words: webWords
+  words: englishWords
 };
 
-
-if (localStorage.getItem("gameMode") == "web") {  
+if (localStorage.getItem("gameMode") == "english") {
+  game.words = englishWords;
+  localStorage.setItem("gameMode", "english");
+} else if (localStorage.getItem("gameMode") == "web") {
   game.words = webWords;
   localStorage.setItem("gameMode", "web");
-}
-else if (localStorage.getItem("gameMode") == "js") {
+} else if (localStorage.getItem("gameMode") == "js") {
   game.words = jsWords;
   localStorage.setItem("gameMode", "js");
-}
-else if (localStorage.getItem("gameMode") == null) {
-  localStorage.setItem("gameMode", "web");
+} else if (localStorage.getItem("gameMode") == null) {
+  localStorage.setItem("gameMode", "english");
 }
 
 // define bestScore if null
@@ -134,6 +196,9 @@ function init() {
   input.value = null;
   input.placeholder = `type to start`;
   game.currentTime = 30;
+  if (game.words === jsWords) {
+    game.currentTime = 160;
+  }
   game.score = 0;
   timeBox.innerHTML = game.currentTime;
   newWord();
@@ -171,7 +236,8 @@ function newWord() {
   printScore(scoreBox);
   input.value = null;
   if (!game.nextWord) {
-    game.currentWord = game.words[Math.floor(Math.random() * game.words.length)];
+    game.currentWord =
+      game.words[Math.floor(Math.random() * game.words.length)];
     game.nextWord = game.words[Math.floor(Math.random() * game.words.length)];
     while (game.nextWord === game.currentWord) {
       // roll word again if it's same than current word
@@ -217,6 +283,7 @@ function setRedBorder() {
 }
 
 function goodAnswer() {
+  successSound.play();
   game.score++;
   checkNewRecord();
   newWord();
@@ -227,6 +294,7 @@ function goodAnswer() {
 }
 
 function badAnswer() {
+  errorSound.play();
   newWord();
   setTimeout(setRedBorder, 100);
   setTimeout(setNormalBorder, 250);
@@ -246,6 +314,14 @@ window.onload = function() {
 let modes = document.querySelectorAll(".gamemodes__list li");
 
 modes[0].addEventListener("click", function() {
+  localStorage.setItem("gameMode", "english");
+  game.words = englishWords;
+  game.currentWord = game.words[Math.floor(Math.random() * game.words.length)];
+  game.nextWord = game.words[Math.floor(Math.random() * game.words.length)];
+  gameOver();
+});
+
+modes[1].addEventListener("click", function() {
   localStorage.setItem("gameMode", "web");
   game.words = webWords;
   game.currentWord = game.words[Math.floor(Math.random() * game.words.length)];
@@ -253,27 +329,19 @@ modes[0].addEventListener("click", function() {
   gameOver();
 });
 
-modes[1].addEventListener("click", function() {
+modes[2].addEventListener("click", function() {
   localStorage.setItem("gameMode", "js");
   game.words = jsWords;
   game.currentWord = game.words[Math.floor(Math.random() * game.words.length)];
   game.nextWord = game.words[Math.floor(Math.random() * game.words.length)];
   gameOver();
-  game.currentTime = 160;
-  timeBox.innerHTML = game.currentTime;
 });
 
-modes[2].addEventListener("click", function() {
-  // change array
-});
-
-modes[3].addEventListener("click", function() {
-  document.querySelector('.gamemodes').classList.remove('is-shown');
-});
-
-// done in js cause mouseover behavior !== css hover behavior
-document.querySelector('.gamemodes').addEventListener('mouseover', function() {
-  document.querySelector('.gamemodes').classList.add('is-shown');
-})
+for (let i = 0; i < modes.length; i++) {
+  const mode = modes[i];
+  mode.addEventListener("click", function() {
+    document.querySelector(".gamemodes").classList.toggle("is-shown");
+  });
+}
 
 init();
