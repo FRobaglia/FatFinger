@@ -7,13 +7,13 @@ let darkLightButton = document.querySelector(`.light-dark`);
 let scoreBox = document.querySelector(`.score`);
 let bestScoreBox = document.querySelector(`.best-score`);
 let body = document.querySelector(`body`);
-let soundBox = document.querySelector(".sound");
+let soundBox = document.querySelector(`.sound`);
 
 let playSounds = true;
 
 // sounds
-let successSound = new Audio("assets/sounds/success.wav");
-let errorSound = new Audio("assets/sounds/error.wav");
+let successSound = new Audio(`assets/sounds/success.wav`);
+let errorSound = new Audio(`assets/sounds/error.wav`);
 
 // words arrays
 let englishWords = [
@@ -147,40 +147,39 @@ let game = {
   tutorial: localStorage.getItem(`tutorial`),
   words: englishWords,
   setWords() {
-    this.currentWord = this.words[
-      Math.floor(Math.random() * this.words.length)
-    ];
+    this.currentWord = this.words[Math.floor(Math.random() * this.words.length)];
     this.nextWord = this.words[Math.floor(Math.random() * this.words.length)];
-    while (this.nextWord === this.currentWord) {
-      // randomize word again if it's same than current word
-      this.nextWord = this.words[Math.floor(Math.random() * this.words.length)];
+    if (this.nextWord === this.currentWord) {
+      this.setWords();
     }
+    currentWordBox.innerHTML = game.currentWord;
+    nextWordBox.innerHTML = game.nextWord;
   }
 };
 
 // localStorage settings
-if (localStorage.getItem("gameMode") == "english") {
+if (localStorage.getItem(`gameMode`) == `english`) {
   game.words = englishWords;
-  localStorage.setItem("gameMode", "english");
-} else if (localStorage.getItem("gameMode") == "web") {
+  localStorage.setItem(`gameMode`, `english`);
+} else if (localStorage.getItem(`gameMode`) == `web`) {
   game.words = webWords;
-  localStorage.setItem("gameMode", "web");
-} else if (localStorage.getItem("gameMode") == "js") {
+  localStorage.setItem(`gameMode`, `web`);
+} else if (localStorage.getItem(`gameMode`) == `js`) {
   game.words = jsWords;
-  localStorage.setItem("gameMode", "js");
-} else if (localStorage.getItem("gameMode") == null) {
-  localStorage.setItem("gameMode", "english");
+  localStorage.setItem(`gameMode`, `js`);
+} else if (localStorage.getItem(`gameMode`) == null) {
+  localStorage.setItem(`gameMode`, `english`);
 }
 
-if (localStorage.getItem("playSounds") != "true") {
+if (localStorage.getItem(`playSounds`) != `true`) {
   playSounds = false;
-  soundBox.style.backgroundPosition = "36px 0px";
+  soundBox.style.backgroundPosition = `36px 0px`;
 } else {
-  localStorage.setItem("playSounds", playSounds);
+  localStorage.setItem(`playSounds`, playSounds);
 }
 if (game.bestScore == null) {
   game.bestScore = 0;
-  localStorage.setItem("bestScore", game.bestScore);
+  localStorage.setItem(`bestScore`, game.bestScore);
 }
 
 if (game.displayMode === `dark`) {
@@ -190,10 +189,10 @@ if (game.displayMode === `dark`) {
   localStorage.setItem(`displayMode`, game.displayMode);
 }
 
-if (game.tutorial !== "done") {
+if (game.tutorial !== `done`) {
   // tutorial();
-  game.tutorial = "done";
-  localStorage.setItem("tutorial", game.tutorial);
+  game.tutorial = `done`;
+  localStorage.setItem(`tutorial`, game.tutorial);
 }
 
 function init() {
@@ -205,9 +204,10 @@ function init() {
     game.currentTime = 120;
   }
   game.score = 0;
+  printScore(scoreBox);
   timeBox.innerHTML = game.currentTime;
   bestScoreBox.innerHTML = game.bestScore;
-  newWord();
+  game.setWords();
 }
 
 function timer() {
@@ -226,7 +226,6 @@ function checkNewRecord() {
   if (game.score > game.bestScore) {
     game.bestScore = game.score;
     localStorage.setItem(`bestScore`, game.bestScore);
-    game.bestScore = localStorage.getItem(`bestScore`);
     bestScoreBox.innerHTML = game.bestScore;
   }
 }
@@ -240,15 +239,11 @@ function gameOver() {
 function newWord() {
   printScore(scoreBox);
   input.value = null;
-  if (!game.nextWord) {
-    game.setWords();
-  } else {
-    game.currentWord = game.nextWord;
-    game.nextWord = game.words[Math.floor(Math.random() * game.words.length)];
-    while (game.nextWord === game.currentWord) {
-      // roll word again if it's same than current word
-      game.nextWord = game.words[Math.floor(Math.random() * game.words.length)];
-    }
+  game.currentWord = game.nextWord;
+  game.nextWord = game.words[Math.floor(Math.random() * game.words.length)];
+  if (game.nextWord === game.currentWord) {
+    newWord();
+    return;
   }
   currentWordBox.innerHTML = game.currentWord;
   nextWordBox.innerHTML = game.nextWord;
@@ -270,7 +265,7 @@ function printScore(element) {
 }
 
 function setNormalBorder() {
-  input.style.border = "";
+  input.style.border = ``;
 }
 function setGreenBorder() {
   input.style.border = `3px solid #4cd137`;
@@ -310,16 +305,18 @@ window.onload = function() {
   };
 };
 
-soundBox.addEventListener("click", function() {
+soundBox.addEventListener(`click`, function() {
+  // (des)activate sound
   playSounds = !playSounds;
-  localStorage.setItem("playSounds", playSounds);
+  localStorage.setItem(`playSounds`, playSounds);
   if (playSounds) {
     successSound.play();
-    soundBox.style.backgroundPosition = "0px 0px";
+    soundBox.style.backgroundPosition = `0px 0px`;
   } else {
-    soundBox.style.backgroundPosition = "36px 0px";
+    soundBox.style.backgroundPosition = `36px 0px`;
   }
 });
+
 darkLightButton.addEventListener(`click`, function() {
   // lightmode/darkmode
   if (game.displayMode === `dark`) {
@@ -333,24 +330,24 @@ darkLightButton.addEventListener(`click`, function() {
 
 // switch words
 
-let modes = document.querySelectorAll(".gamemodes__list li");
+let modes = document.querySelectorAll(`.gamemodes__list li`);
 
-modes[0].addEventListener("click", function() {
-  localStorage.setItem("gameMode", "english");
+modes[0].addEventListener(`click`, function() {
+  localStorage.setItem(`gameMode`, `english`);
   game.words = englishWords;
   game.setWords();
   gameOver();
 });
 
-modes[1].addEventListener("click", function() {
-  localStorage.setItem("gameMode", "web");
+modes[1].addEventListener(`click`, function() {
+  localStorage.setItem(`gameMode`, `web`);
   game.words = webWords;
   game.setWords();
   gameOver();
 });
 
-modes[2].addEventListener("click", function() {
-  localStorage.setItem("gameMode", "js");
+modes[2].addEventListener(`click`, function() {
+  localStorage.setItem(`gameMode`, `js`);
   game.words = jsWords;
   game.setWords();
   gameOver();
@@ -358,8 +355,8 @@ modes[2].addEventListener("click", function() {
 
 for (let i = 0; i < modes.length; i++) {
   const mode = modes[i];
-  mode.addEventListener("click", function() {
-    document.querySelector(".gamemodes").classList.toggle("is-shown");
+  mode.addEventListener(`click`, function() {
+    document.querySelector(`.gamemodes`).classList.toggle(`is-shown`);
   });
 }
 
