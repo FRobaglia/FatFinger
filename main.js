@@ -141,18 +141,21 @@ let game = {
   currentTime: null,
   timerIsActive: false,
   score: null,
-  bestScore: localStorage.getItem(`bestScore`),
-  displayMode: localStorage.getItem(`displayMode`),
-  tutorial: localStorage.getItem(`tutorial`),
-  words: englishWords,
+  memory: {
+    bestScore: localStorage.getItem(`bestScore`),
+    displayMode: localStorage.getItem(`displayMode`),
+    tutorial: localStorage.getItem(`tutorial`),
+    words: englishWords
+  },
   setWords() {
-    this.currentWord = this.words[Math.floor(Math.random() * this.words.length)];
-    this.nextWord = this.words[Math.floor(Math.random() * this.words.length)];
+    this.currentWord = this.memory.words[Math.floor(Math.random() * this.memory.words.length)];
+    this.nextWord = this.memory.words[Math.floor(Math.random() * this.memory.words.length)];
     if (this.nextWord === this.currentWord) {
       this.setWords();
+      return;
     }
-    currentWordBox.innerHTML = game.currentWord;
-    nextWordBox.innerHTML = game.nextWord;
+    currentWordBox.textContent = game.currentWord;
+    nextWordBox.textContent = game.nextWord;
   }
 };
 
@@ -176,22 +179,22 @@ if (localStorage.getItem(`playSounds`) != `true`) {
 } else {
   localStorage.setItem(`playSounds`, playSounds);
 }
-if (game.bestScore == null) {
-  game.bestScore = 0;
-  localStorage.setItem(`bestScore`, game.bestScore);
+if (game.memory.bestScore == null) {
+  game.memory.bestScore = 0;
+  localStorage.setItem(`bestScore`, game.memory.bestScore);
 }
 
-if (game.displayMode === `dark`) {
+if (game.memory.displayMode === `dark`) {
   body.classList.toggle(`dark`);
-} else if (game.displayMode == null) {
-  game.displayMode = `light`;
-  localStorage.setItem(`displayMode`, game.displayMode);
+} else if (game.memory.displayMode == null) {
+  game.memory.displayMode = `light`;
+  localStorage.setItem(`displayMode`, game.memory.displayMode);
 }
 
-if (game.tutorial !== `done`) {
+if (game.memory.tutorial !== `done`) {
   // tutorial();
-  game.tutorial = `done`;
-  localStorage.setItem(`tutorial`, game.tutorial);
+  game.memory.tutorial = `done`;
+  localStorage.setItem(`tutorial`, game.memory.tutorial);
 }
 
 function init() {
@@ -199,19 +202,19 @@ function init() {
   input.value = null;
   input.placeholder = `type to start`;
   game.currentTime = 30;
-  if (game.words === jsWords) {
+  if (game.memory.words === jsWords) {
     game.currentTime = 120;
   }
   game.score = 0;
   printScore(scoreBox);
-  timeBox.innerHTML = game.currentTime;
-  bestScoreBox.innerHTML = game.bestScore;
+  timeBox.textContent = game.currentTime;
+  bestScoreBox.textContent = game.memory.bestScore;
   game.setWords();
 }
 
 function timer() {
   game.currentTime--;
-  timeBox.innerHTML = game.currentTime;
+  timeBox.textContent = game.currentTime;
   if (game.currentTime > -1) {
     setTimeout(timer, 1000);
   } else {
@@ -220,10 +223,10 @@ function timer() {
 }
 
 function checkNewRecord() {
-  if (game.score > game.bestScore) {
-    game.bestScore = game.score;
-    localStorage.setItem(`bestScore`, game.bestScore);
-    bestScoreBox.innerHTML = game.bestScore;
+  if (game.score > game.memory.bestScore) {
+    game.memory.bestScore = game.score;
+    localStorage.setItem(`bestScore`, game.memory.bestScore);
+    bestScoreBox.textContent = game.memory.bestScore;
   }
 }
 
@@ -237,13 +240,13 @@ function newWord() {
   printScore(scoreBox);
   input.value = null;
   game.currentWord = game.nextWord;
-  game.nextWord = game.words[Math.floor(Math.random() * game.words.length)];
+  game.nextWord = game.memory.words[Math.floor(Math.random() * game.memory.words.length)];
   if (game.nextWord === game.currentWord) {
     newWord();
     return;
   }
-  currentWordBox.innerHTML = game.currentWord;
-  nextWordBox.innerHTML = game.nextWord;
+  currentWordBox.textContent = game.currentWord;
+  nextWordBox.textContent = game.nextWord;
 }
 
 input.addEventListener(`keyup`, function(event) {
@@ -258,7 +261,7 @@ input.addEventListener(`keyup`, function(event) {
 });
 
 function printScore(element) {
-  element.innerHTML = game.score;
+  element.textContent = game.score;
 }
 
 function goodAnswer() {
@@ -291,12 +294,12 @@ soundBox.addEventListener(`click`, function() {
 
 darkLightButton.addEventListener(`click`, function() {
   // lightmode/darkmode
-  if (game.displayMode === `dark`) {
-    game.displayMode = `light`;
-  } else if (game.displayMode === `light`) {
-    game.displayMode = `dark`;
+  if (game.memory.displayMode === `dark`) {
+    game.memory.displayMode = `light`;
+  } else if (game.memory.displayMode === `light`) {
+    game.memory.displayMode = `dark`;
   }
-  localStorage.setItem(`displayMode`, game.displayMode);
+  localStorage.setItem(`displayMode`, game.memory.displayMode);
   body.classList.toggle(`dark`);
 });
 
@@ -306,21 +309,21 @@ let modes = document.querySelectorAll(`.gamemodes__list li`);
 
 modes[0].addEventListener(`click`, function() {
   localStorage.setItem(`gameMode`, `english`);
-  game.words = englishWords;
+  game.memory.words = englishWords;
   game.setWords();
   gameOver();
 });
 
 modes[1].addEventListener(`click`, function() {
   localStorage.setItem(`gameMode`, `web`);
-  game.words = webWords;
+  game.memory.words = webWords;
   game.setWords();
   gameOver();
 });
 
 modes[2].addEventListener(`click`, function() {
   localStorage.setItem(`gameMode`, `js`);
-  game.words = jsWords;
+  game.memory.words = jsWords;
   game.setWords();
   gameOver();
 });

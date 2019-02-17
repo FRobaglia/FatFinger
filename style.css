@@ -192,6 +192,7 @@ body.dark .game {
 }
 
 .gamemodes__flag {
+  font-weight: bold;
   display: flex;
   flex-flow: column wrap;
   position: absolute;
