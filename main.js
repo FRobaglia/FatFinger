@@ -13,7 +13,6 @@ let playSounds = true;
 
 // sounds
 let successSound = new Audio(`assets/sounds/success.wav`);
-let errorSound = new Audio(`assets/sounds/error.wav`);
 
 // words arrays
 let englishWords = [
@@ -211,8 +210,6 @@ function init() {
 }
 
 function timer() {
-  input.placeholder = ``;
-  game.timerIsActive = true;
   game.currentTime--;
   timeBox.innerHTML = game.currentTime;
   if (game.currentTime > -1) {
@@ -251,27 +248,17 @@ function newWord() {
 
 input.addEventListener(`keyup`, function(event) {
   if (!game.timerIsActive) {
+    game.timerIsActive = true;
+    input.placeholder = ``;
     timer();
   }
-  if (input.value === game.currentWord && event.keyCode === 13) {
+  if (input.value === game.currentWord) {
     goodAnswer();
-  } else if (event.keyCode === 13) {
-    badAnswer();
   }
 });
 
 function printScore(element) {
   element.innerHTML = game.score;
-}
-
-function setNormalBorder() {
-  input.style.border = ``;
-}
-function setGreenBorder() {
-  input.style.border = `3px solid #4cd137`;
-}
-function setRedBorder() {
-  input.style.border = `3px solid red`;
 }
 
 function goodAnswer() {
@@ -281,21 +268,6 @@ function goodAnswer() {
   game.score++;
   checkNewRecord();
   newWord();
-  setTimeout(setGreenBorder, 100);
-  setTimeout(setNormalBorder, 250);
-  setTimeout(setGreenBorder, 350);
-  setTimeout(setNormalBorder, 500);
-}
-
-function badAnswer() {
-  if (playSounds) {
-    errorSound.play();
-  }
-  newWord();
-  setTimeout(setRedBorder, 100);
-  setTimeout(setNormalBorder, 250);
-  setTimeout(setRedBorder, 350);
-  setTimeout(setNormalBorder, 500);
 }
 
 window.onload = function() {

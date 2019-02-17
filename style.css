@@ -173,12 +173,28 @@ body.dark .game {
   min-width: 100px;
 }
 .gamemodes__list li:hover {
-  font-weight: bold;
   cursor: pointer;
   color: rgb(46, 204, 113);
 }
 
 .gamemodes__list li:last-child {
   min-width: 50px;
-  font-size: 28px;
+  height: 80px;
+  position: relative;
+}
+
+.gamemodes__arrow {
+  position: absolute;
+  font-size: 24px;  
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.gamemodes__flag {
+  display: flex;
+  flex-flow: column wrap;
+  position: absolute;
+  right: 5px;
+  top: 1px;
 }
