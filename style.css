@@ -146,7 +146,7 @@ body.dark .game {
   color: whitesmoke;
   position: absolute;
   left: -400px;
-  top: 140px;
+  bottom: 16px;
 }
 
 .gamemodes.is-shown {

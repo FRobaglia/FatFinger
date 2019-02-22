@@ -11,6 +11,10 @@ let soundBox = document.querySelector(`.sound`);
 
 let playSounds = true;
 
+window.addEventListener("load", function(event) {
+  console.log("Toutes les ressources sont chargées !");
+});
+
 // sounds
 let successSound = new Audio(`assets/sounds/success.wav`);
 
@@ -133,7 +137,6 @@ let webWords = [
   `commit`,
   `defer`
 ];
-
 // game informations
 let game = {
   currentWord: null,
