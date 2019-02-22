@@ -161,13 +161,13 @@ let game = {
 
 // localStorage settings
 if (localStorage.getItem(`gameMode`) == `english`) {
-  game.words = englishWords;
+  game.memory.words = englishWords;
   localStorage.setItem(`gameMode`, `english`);
 } else if (localStorage.getItem(`gameMode`) == `web`) {
-  game.words = webWords;
+  game.memory.words = webWords;
   localStorage.setItem(`gameMode`, `web`);
 } else if (localStorage.getItem(`gameMode`) == `js`) {
-  game.words = jsWords;
+  game.memory.words = jsWords;
   localStorage.setItem(`gameMode`, `js`);
 } else if (localStorage.getItem(`gameMode`) == null) {
   localStorage.setItem(`gameMode`, `english`);
