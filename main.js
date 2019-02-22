@@ -11,10 +11,6 @@ let soundBox = document.querySelector(`.sound`);
 
 let playSounds = true;
 
-window.addEventListener("load", function(event) {
-  console.log("Toutes les ressources sont chargées !");
-});
-
 // sounds
 let successSound = new Audio(`assets/sounds/success.wav`);
 
@@ -151,8 +147,12 @@ let game = {
     words: englishWords
   },
   setWords() {
-    this.currentWord = this.memory.words[Math.floor(Math.random() * this.memory.words.length)];
-    this.nextWord = this.memory.words[Math.floor(Math.random() * this.memory.words.length)];
+    this.currentWord = this.memory.words[
+      Math.floor(Math.random() * this.memory.words.length)
+    ];
+    this.nextWord = this.memory.words[
+      Math.floor(Math.random() * this.memory.words.length)
+    ];
     if (this.nextWord === this.currentWord) {
       this.setWords();
       return;
@@ -216,12 +216,14 @@ function init() {
 }
 
 function timer() {
-  game.currentTime--;
-  timeBox.textContent = game.currentTime;
-  if (game.currentTime > -1) {
-    setTimeout(timer, 1000);
-  } else {
-    gameOver();
+  if (game.timerIsActive) {
+    game.currentTime--;
+    timeBox.textContent = game.currentTime;
+    if (game.currentTime > -1) {
+      setTimeout(timer, 1000);
+    } else {
+      gameOver();
+    }
   }
 }
 
@@ -243,7 +245,8 @@ function newWord() {
   printScore(scoreBox);
   input.value = null;
   game.currentWord = game.nextWord;
-  game.nextWord = game.memory.words[Math.floor(Math.random() * game.memory.words.length)];
+  game.nextWord =
+    game.memory.words[Math.floor(Math.random() * game.memory.words.length)];
   if (game.nextWord === game.currentWord) {
     newWord();
     return;
